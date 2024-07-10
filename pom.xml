@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.evernorth.mongo.kafka.connect.auth</groupId>
+    <groupId>com.evernorth.mongo.kafka.auth</groupId>
     <artifactId>mongo-kafka-credential-provider</artifactId>
     <name>Mongo Kafka Connect Assume Role Credential Provider</name>
     <version>1.0.0</version>
@@ -15,7 +15,7 @@
 
         <!-- latest version as of 2019-01 -->
         <exec-maven-plugin.version>3.2.0</exec-maven-plugin.version>
-        <!--<junit.version>4.12</junit.version>-->
+        <junit.version>4.12</junit.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <mockito-all.version>2.23.4</mockito-all.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -34,29 +34,17 @@
             <artifactId>sts</artifactId>
             <version>${aws-java-sdk.version}</version>
         </dependency>
-        <!--<dependency>
+        <dependency>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>
           <version>${junit.version}</version>
-        </dependency>-->
+        </dependency>
         <dependency>
           <groupId>org.mongodb.kafka</groupId>
           <artifactId>mongo-kafka-connect</artifactId>
           <scope>provided</scope>
           <version>1.13.0</version>
         </dependency>
-        <!--<dependency>
-            <groupId>kafka-connect</groupId>
-            <artifactId>kafka-connect</artifactId>
-            <scope>provided</scope>
-            <version>1.13.0</version>
-        </dependency>-->
-        <!--<dependency>
-            <groupId>org.apache.kafka</groupId>
-            <artifactId>connect-api</artifactId>
-            <scope>provided</scope>
-            <version>2.6.0</version>
-        </dependency>-->
     </dependencies>
 
     <build>
