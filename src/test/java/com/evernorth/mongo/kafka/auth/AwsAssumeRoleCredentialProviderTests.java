@@ -1,4 +1,5 @@
-import com.evernorth.mongo.kafka.auth.AwsAssumeRoleCredentialProvider;
+package com.evernorth.mongo.kafka.auth;
+
 import com.mongodb.AuthenticationMechanism;
 import com.mongodb.AwsCredential;
 import com.mongodb.MongoCredential;
