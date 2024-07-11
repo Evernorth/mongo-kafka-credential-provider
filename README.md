@@ -35,7 +35,7 @@ Example -
   mongodbaws.auth.mechanism.region
   mongodbaws.auth.mechanism.roleSessionName
   ````
-- It validates that the roleArn is always passed and defaults region (to us-east-1) and role session name to (MONGO-CONNECTOR-SESSION-<random UUID>) if they are not passed.
+- It validates that the roleArn is always passed and defaults region (to us-east-1) and role session name (to MONGO-CONNECTOR-SESSION-{random UUID}) if they are not passed.
 
 ## Tests and Coverage
 
