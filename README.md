@@ -40,7 +40,7 @@ Example -
 ## Tests and Coverage
 
 - Unit tests can be located at ``com.evernorth.mongo.kafka.auth.AwsAssumeRoleCredentialProviderTests``
-- Jacoco plugin is used for code coverage
+- Jacoco plugin is used for code coverage.
 
 ## Dependencies
 
