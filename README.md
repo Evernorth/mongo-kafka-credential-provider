@@ -3,7 +3,7 @@
 **Description**:  This repo provides an implementation of the pluggable interface [CustomCredentialProvider](https://github.com/mongodb/mongo-kafka/blob/master/src/main/java/com/mongodb/kafka/connect/util/custom/credentials/CustomCredentialProvider.java) from the [mongo-kafka](https://github.com/mongodb/mongo-kafka/) repo.
 
 The [mongo-kafka connector](https://www.mongodb.com/docs/kafka-connector/current/) enabled a pluggable [interface](https://github.com/mongodb/mongo-kafka/commit/6e43b1d97f52be6d862328e442eea8ece5492d30) in release 1.13.0. 
-This was done to enable injection of a custom credential provider in the mongo client that gets created for both the sink and the source connectors.
+This enhancement enabled injection of a custom credential provider in the mongo client that gets created for both the sink and the source connectors.
 The implementation of this interface is not provided in the mongo-kafka connector repo as it could have different variations (such as different credential providers from AWS)
 or any other credential provider that can be injected in the MongoClient.
 The kafka connect framework allows us to provide custom jars that can be made available on the class path by providing a plugin location. 
@@ -16,7 +16,7 @@ mongo kafka connector to use this, refer to instructions [here](https://github.c
 
 ## How to use this repo with mongo kafka connector
 
-1. Use ``mvn clean package`` generate a jar.
+1. Use ``mvn clean package`` to generate a jar.
 2. Add the compiled JAR to the classpath/plugin path for your Kafka workers. For more information about plugin paths, see the Confluent [documentation](https://docs.confluent.io/platform/current/connect/community.html). Refer to this [guide](https://docs.confluent.io/platform/current/connect/userguide.html#) for more information on kafka connect.
 
 ## Technical Details
@@ -35,7 +35,7 @@ Example -
   mongodbaws.auth.mechanism.region
   mongodbaws.auth.mechanism.roleSessionName
   ````
-- It validates that the roleArn is always passed and defaults region (to us-east-1) and role session name (to MONGO-CONNECTOR-SESSION-{random UUID}) if they are not passed.
+- It validates that the roleArn is always passed as an argument. Region will default to us-east-1 and role session name defaults to MONGO-CONNECTOR-SESSION-{random UUID}) if not included as arguments.
 
 ## Tests and Coverage
 
