@@ -53,7 +53,8 @@ This repo uses the below jars
 
 ## Limitations
 
-The external (to the connector) jar that this repo produces has been tested with Confluent platform hosted on AWS EC2 instances. It has not been tested on confluent cloud.
+- The external (to the connector) jar that this repo produces has been tested with Confluent platform hosted on AWS EC2 instances. It has not been tested on confluent cloud.
+- The mongo kafka connector needs external jars that are compiled using Java 8. Hence,  we have the java version set to 1.8. 
 
 ## License
 Mongo Kafka Credential Provider is Open Source software released under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).
