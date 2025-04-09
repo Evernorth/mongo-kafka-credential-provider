@@ -43,7 +43,7 @@ With the release of 1.0.1 version of this library, we have added support for ext
 
 When Kafka and Kafka Connect clusters are deployed as shared resources, and different teams deploy their mongo kafka connectors in that shared space, we run into the confused deputy problem. The below diagram illustrates this scenario.
 
-<img alt="External Id" height="500" src="images/Connector-External_id.jpg" width="700"/>
+<img alt="External Id" height="500" src="images/confused-deputy.jpg" width="700"/>
 
 The above diagram shows the case for a sink connector. In this case, the kafka role can assume roles from AWS Accounts A, B and C and consequently has the ability to send traffic from any topic to any Atlas Database/Collection. The same is applicable for the source connector as well.
 
