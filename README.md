@@ -39,7 +39,7 @@ Example -
 
 **External ID Validation**
 
-With the release of 1.0.1 version of this library, we have added support for external ID validation to address the confused deputy problem. Below is an overview.
+With the release of 1.0.1 version of this library, we have added support for external ID validation to address the [confused deputy](https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html) problem. Below is an overview.
 
 When Kafka and Kafka Connect clusters are deployed as shared resources, and different teams deploy their mongo kafka connectors in that shared space, we run into the confused deputy problem. The below diagram illustrates this scenario.
 
