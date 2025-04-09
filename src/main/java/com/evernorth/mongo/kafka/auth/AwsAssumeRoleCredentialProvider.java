@@ -23,6 +23,8 @@ public class AwsAssumeRoleCredentialProvider implements CustomCredentialProvider
     private StsClient stsClient;
     private AssumeRoleRequest roleRequest;
 
+    private String externalId;
+
     static final Logger LOGGER = LoggerFactory.getLogger(AwsAssumeRoleCredentialProvider.class);
 
     @Override
@@ -56,6 +58,31 @@ public class AwsAssumeRoleCredentialProvider implements CustomCredentialProvider
         }else{
             throw new ConfigException("AWS Role ARN not provided.");
         }
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Validating External Id Config");
+        }
+        if (configs.containsKey(EXTERNAL_ID_ENABLED)) {
+            boolean externalIdEnabled = Boolean.parseBoolean((String)configs.get(EXTERNAL_ID_ENABLED));
+            String connectorClass = (String)configs.get(CONNECTOR_CLASS_CONFIG);
+            if (externalIdEnabled)
+                if (connectorClass.equals(MONGO_SINK_CONNECTOR_CLASS)) {
+                    String topicsConfig = null;
+                    if (configs.containsKey(TOPICS_CONFIG))
+                        topicsConfig = (String)configs.get(TOPICS_CONFIG);
+                    if (topicsConfig == null || topicsConfig.isEmpty())
+                        throw new ConfigException(TOPICS_CONFIG + " must to be set when "+ EXTERNAL_ID_ENABLED
+                                + " is set to true.");
+                } else if (connectorClass.equals(MONGO_SOURCE_CONNECTOR_CLASS)) {
+                    String dbNameConfig = (String)configs.get(DATABASE_CONFIG);
+                    String collectionNameConfig = (String)configs.get(COLLECTION_CONFIG);
+                    if (dbNameConfig == null || dbNameConfig
+                            .isEmpty() || collectionNameConfig == null || collectionNameConfig
+
+                            .isEmpty())
+                        throw new ConfigException(DATABASE_CONFIG + " and " + COLLECTION_CONFIG + " must to be set when "
+                                + EXTERNAL_ID_ENABLED + " is set to true.");
+                }
+        }
     }
 
     @Override
@@ -85,11 +112,28 @@ public class AwsAssumeRoleCredentialProvider implements CustomCredentialProvider
             }
             sessionName = "MONGO-CONNECTOR-SESSION-" + UUID.randomUUID();
         }
+        boolean externalIdEnabled = false;
+        if (configs.containsKey(EXTERNAL_ID_ENABLED)) {
+            externalIdEnabled = Boolean.parseBoolean((String)configs.get(EXTERNAL_ID_ENABLED));
+            if (LOGGER.isDebugEnabled() && externalIdEnabled)
+                LOGGER.debug("External Id Enable Flag set to true.");
+        }
+        String connectorClass = (String)configs.get(CONNECTOR_CLASS_CONFIG);
+        if (externalIdEnabled)
+            if (connectorClass.equals(MONGO_SINK_CONNECTOR_CLASS)) {
+                externalId = (String)configs.get(TOPICS_CONFIG);
+            } else if (connectorClass.equals(MONGO_SOURCE_CONNECTOR_CLASS)) {
+                externalId = configs.get(DATABASE_CONFIG) + "-" + configs.get(COLLECTION_CONFIG);
+            }
         stsClient =
                 StsClient.builder()
                         .credentialsProvider(DefaultCredentialsProvider.create())
                         .region(region)
                         .build();
-        roleRequest = AssumeRoleRequest.builder().roleArn(roleArn).roleSessionName(sessionName).build();
+        AssumeRoleRequest.Builder builder = AssumeRoleRequest.builder().roleArn(roleArn).roleSessionName(sessionName);
+        if (externalId != null && !externalId.isEmpty()){
+            builder.externalId(externalId);
+        }
+        roleRequest = builder.build();
     }
 }
