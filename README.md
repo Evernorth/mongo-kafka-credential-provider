@@ -39,7 +39,7 @@ Example -
 
 **External ID Validation**
 
-With the release of 1.0.1 version of this library, we have added support for external ID validation to address the [confused deputy](https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html) problem. Below is an overview.
+With the release of 1.0.1 version of this library, we have added support for external ID validation to address [the confused deputy problem](https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html). Below is an overview.
 
 When Kafka and Kafka Connect clusters are deployed as shared resources, and different teams deploy their mongo kafka connectors in that shared space, we run into the confused deputy problem. The below diagram illustrates this scenario.
 
@@ -47,7 +47,7 @@ When Kafka and Kafka Connect clusters are deployed as shared resources, and diff
 
 The above diagram shows the case for a sink connector. In this case, the kafka role can assume roles from AWS Accounts A, B and C and consequently has the ability to send traffic from any topic to any Atlas Database/Collection. The same is applicable for the source connector as well.
 
-To solve this, we have made changes to the ``AwsAssumeRoleCredentialProvider`` class to enable addition of an external id if the property ``mongodbaws.auth.mechanism.externalId.enabled`` is set to true. The external id is set to the value derived from ``topics`` property of the sink connector or the ``database`` and ``collection`` (concatenated with a - separator) based on the type of connector (sink or source).
+To solve this, we have made changes to the ``AwsAssumeRoleCredentialProvider`` class to enable addition of an external id if the property ``mongodbaws.auth.mechanism.externalId.enabled`` is set to true. The external id is set to the value derived from ``topics`` property of the sink connector or the ``database`` and ``collection`` (concatenated with a - separator) properties of the source connector based on the type of connector (sink or source) in use.
 
 The Connector sends this external ID as part of the assume role request. Consequently, an external id condition needs to be added to the trust relationships of the role that is assumed. An example is given below.
 
@@ -98,7 +98,7 @@ This repo uses the below jars
 ## License
 Mongo Kafka Credential Provider is Open Source software released under the [Apache 2.0 license](https://www.apache.org/licenses/LICENSE-2.0.html).
 
-## Revisions
+## Changelog
 | Version | description|
 |---------|------------|
 | 1.0.0   | Initial Version|
