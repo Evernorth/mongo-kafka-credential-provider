@@ -37,6 +37,45 @@ Example -
   ````
 - It validates that the roleArn is always passed as an argument. Region will default to us-east-1 and role session name defaults to MONGO-CONNECTOR-SESSION-{random UUID}) if not included as arguments.
 
+**External ID Validation**
+
+With the release of 1.0.1 version of this library, we have added support for external ID validation to address [the confused deputy problem](https://docs.aws.amazon.com/IAM/latest/UserGuide/confused-deputy.html). Below is an overview.
+
+When Kafka and Kafka Connect clusters are deployed as shared resources, and different teams deploy their mongo kafka connectors in that shared space, we run into the confused deputy problem. The below diagram illustrates this scenario.
+
+<img alt="External Id" height="500" src="images/confused-deputy.jpg" width="700"/>
+
+The above diagram shows the case for a sink connector. In this case, the kafka role can assume roles from AWS Accounts A, B and C and consequently has the ability to send traffic from any topic to any Atlas Database/Collection. The same is applicable for the source connector as well.
+
+To solve this, we have made changes to the ``AwsAssumeRoleCredentialProvider`` class to enable addition of an external id if the property ``mongodbaws.auth.mechanism.externalId.enabled`` is set to true. The external id is set to the value derived from ``topics`` property of the sink connector or the ``database`` and ``collection`` (concatenated with a - separator) properties of the source connector based on the type of connector (sink or source) in use.
+
+The Connector sends this external ID as part of the assume role request. Consequently, an external id condition needs to be added to the trust relationships of the role that is assumed. An example is given below.
+
+````
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "AWS": "arn:aws:iam::<<ACCOUNT_ID>>:role/Enterprise/KafkaConnect"
+            },
+            "Action": "sts:AssumeRole",
+            "Condition": {
+                "ForAnyValue:StringLike": {
+                    "sts:ExternalId": [
+                        "TopicA",
+                        "db-collection"
+                    ]
+                }
+            }
+        }
+    ]
+}
+````
+
+This policy will work for both a source and sink connector.
+
 ## Tests and Coverage
 
 - Unit tests can be located at ``com.evernorth.mongo.kafka.auth.AwsAssumeRoleCredentialProviderTests``

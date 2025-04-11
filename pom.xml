@@ -6,7 +6,7 @@
     <groupId>com.evernorth.mongo.kafka.auth</groupId>
     <artifactId>mongo-kafka-credential-provider</artifactId>
     <name>Mongo Kafka Connect Assume Role Credential Provider</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
